@@ -9,7 +9,6 @@ from .models import *
 
 def filter_view(request):
     if request.method == 'POST':
-        print(request.POST)
         questions = FilterQuestion.objects.all()
         for q in questions:
             answer = request.POST.get(q.title)
@@ -29,7 +28,6 @@ def filter_view(request):
 
 def personal_view(request):
     if request.method == 'POST':
-        print(request.POST)
         questions = PersonalQuestion.objects.all()
         for q in questions:
             answer = request.POST.get(q.title)
@@ -49,7 +47,6 @@ def personal_view(request):
 
 def result(request):
     animal_list = set([x.name for x in Animal.objects.all()])
-    print(animal_list)
 
     filter_questions = FilterQuestion.objects.all()
     personal_questions = PersonalQuestion.objects.all()
