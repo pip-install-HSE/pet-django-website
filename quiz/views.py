@@ -140,7 +140,7 @@ def catalog(request, filtered):
 
     if filtered == 't':
         filtered = filter_animals(questions)
-        print(filtered)
+#         print(filtered)
 
         collection = [Animal.objects.get(name=x) for x in filtered]
 
