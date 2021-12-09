@@ -7,53 +7,9 @@ from .models import *
 
 # Create your views here.
 
-def filter_view(request):
-    if request.method == 'POST':
-        print(request.POST)
-        questions = FilterQuestion.objects.all()
-        for q in questions:
-            answer = request.POST.get(q.title)
-            q.cur_answer = answer
-            q.save()
 
-        return HttpResponseRedirect(reverse('personal'))
-
-    else:
-        questions = FilterQuestion.objects.all()
-        context = {
-            'questions': questions
-        }
-
-        return render(request, 'filter.html', context)
-
-
-def personal_view(request):
-    if request.method == 'POST':
-        print(request.POST)
-        questions = PersonalQuestion.objects.all()
-        for q in questions:
-            answer = request.POST.get(q.title)
-            q.cur_answer = answer
-            q.save()
-
-        return HttpResponseRedirect(reverse('result'))
-
-    else:
-        questions = PersonalQuestion.objects.all()
-        context = {
-            'questions': questions
-        }
-
-        return render(request, 'personal.html', context)
-
-
-def result(request):
+def filter_animals(filter_questions):
     animal_list = set([x.name for x in Animal.objects.all()])
-    print(animal_list)
-
-    filter_questions = FilterQuestion.objects.all()
-    personal_questions = PersonalQuestion.objects.all()
-
     for question in filter_questions:
         if question.title == 'Размер':
             rm_list = []
@@ -105,7 +61,7 @@ def result(request):
             rm_list = []
             if question.cur_answer == 'Шерсть':
                 rm_list = [
-                    'Улитка', 'Попугай', 'Еж', 'Черепаха', 'Рыбка','python','Хамелеон', ]
+                    'Улитка', 'Попугай', 'Еж', 'Черепаха', 'Рыбка', 'python', 'Хамелеон', ]
 
             if question.cur_answer == 'Оперение':
                 rm_list = ['Улитка',
@@ -116,7 +72,8 @@ def result(request):
                            'Кролик', 'Хорек', 'Хаски']
 
             if question.cur_answer == 'Отсутствует и то, и то':
-                rm_list = ['Попугай', 'Кошка', 'Собака', 'Морская Свинка', 'Хомяк',  'Шиншилла', 'Кролик', 'Хорек', 'Хаски']
+                rm_list = ['Попугай', 'Кошка', 'Собака', 'Морская Свинка', 'Хомяк', 'Шиншилла', 'Кролик', 'Хорек',
+                           'Хаски']
 
             for x in rm_list:
                 try:
@@ -170,6 +127,72 @@ def result(request):
                     animal_list.remove(x)
                 except KeyError:
                     pass
+
+    return list(animal_list)
+
+
+def catalog(request, filtered):
+    collection = Animal.objects.all()
+
+    questions = FilterQuestion.objects.all()
+
+    filters = None
+
+    if filtered == 't':
+        filtered = filter_animals(questions)
+        print(filtered)
+
+        collection = [Animal.objects.get(name=x) for x in filtered]
+
+        filters = [q.cur_answer for q in questions]
+
+    return render(request, 'catalog.html', {'animals': collection, 'filters': filters})
+
+
+def filter_view(request):
+    if request.method == 'POST':
+        questions = FilterQuestion.objects.all()
+        for q in questions:
+            answer = request.POST.get(q.title)
+            q.cur_answer = answer
+            q.save()
+
+        filtered = filter_animals(questions)
+        return HttpResponseRedirect(reverse('catalog', args='t'))
+
+    else:
+        questions = FilterQuestion.objects.all()
+        context = {
+            'questions': questions
+        }
+
+        return render(request, 'filter.html', context)
+
+
+def personal_view(request):
+    if request.method == 'POST':
+        questions = PersonalQuestion.objects.all()
+        for q in questions:
+            answer = request.POST.get(q.title)
+            q.cur_answer = answer
+            q.save()
+
+        return HttpResponseRedirect(reverse('result'))
+
+    else:
+        questions = PersonalQuestion.objects.all()
+        context = {
+            'questions': questions
+        }
+
+        return render(request, 'personal.html', context)
+
+
+def result(request):
+    animal_list = set([x.name for x in Animal.objects.all()])
+
+    filter_questions = FilterQuestion.objects.all()
+    personal_questions = PersonalQuestion.objects.all()
 
     points = 0
 

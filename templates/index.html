@@ -25,7 +25,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'filter' %}">Перейти к тестированию</a>
+                <a class="nav-link" href="{% url 'catalog' filtered='f' %}">Каталог животных</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'personal' %}">Перейти к тестированию</a>
             </li>
         </ul>
     </div>

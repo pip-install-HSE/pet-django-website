@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+    <div class="container " style="padding-bottom: 50px; padding-top: 30px">
+        <h1>Каталог животных</h1>
+        {% if filters %}
+            <p>Примененные фильтры: </p>
+            {% for f in filters %}
+                <span style="background-color: #889087; margin: 5px; padding: 5px">{{ f }}</span>
+            {% endfor %}
+            <br>
+            <br>
+            <button  class="btn btn-warning"><a href="{% url 'catalog' filtered='f' %}">Сброить фильтры</a></button>
+            <br>
+            <hr>
+        {% else %}
+            <p>Вы можете применить фильтры к каталогу:</p>
+            <button class="btn btn-warning" style="text-decoration: none"><a href="{% url 'filter' %}">Настроить
+                фильтры</a></button>
+            <br>
+            <br>
+        {% endif %}
+        {% for animal in animals %}
+            <div class="card mb-3" style="max-width: 800px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{ animal.photo.url }}" alt="..." style="max-width: 280px; padding: 5px">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ animal.name }}</h5>
+                            {#                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

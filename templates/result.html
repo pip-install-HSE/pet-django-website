@@ -5,16 +5,19 @@
 {% block content %}
     <h1>Ваше животное: {{ animal.name }}</h1>
     <hr>
-    <img src="{{ animal.photo.url }}" alt="photo">
+    <img src="{{ animal.photo.url }}" alt="photo" style="width: 400px">
     <br>
     <br>
     <p>Набранные очки за тестирование: {{ points }}</p>
     <hr>
-    <h4>Ниже представлены варианты, которые подходят Вам, но меньше:</h4>
-    <ul>
-    {%  for a in animal_list %}
-
-        <li>{{ a }}</li>
-    {% endfor %}
-    </ul>
+    <button class="btn btn-warning"><a href="{% url 'personal' %}">Пройти тест снова</a></button>
+    <br>
+    <br>
+{#    <h4>Ниже представлены варианты, которые подходят Вам, но меньше:</h4>#}
+{#    <ul>#}
+{#    {%  for a in animal_list %}#}
+{##}
+{#        <li>{{ a }}</li>#}
+{#    {% endfor %}#}
+{#    </ul>#}
 {% endblock %}
